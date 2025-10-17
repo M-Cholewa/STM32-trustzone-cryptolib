@@ -1,0 +1,43 @@
+# STM32CubeIDE / Eclipse
+.project
+.cproject
+.mxproject
+*.launch
+.metadata/
+.settings/
+.externalToolBuilders/
+
+# STM32CubeIDE generated settings
+*.mxsettings
+
+# Build output
+Debug/
+Release/
+build/
+Binaries/
+*.axf
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.a
+*.d
+*.lst
+*.srec
+
+# Tool / IDE files
+.gdbinit
+*.dep
+*.log
+*.log.*
+*.bak
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: tags, temporary editor files
+tags
