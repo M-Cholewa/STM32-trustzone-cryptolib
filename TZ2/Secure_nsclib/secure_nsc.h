@@ -25,6 +25,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
+#include "aes_encrypt_decrypt.h"
 
 /* Exported types ------------------------------------------------------------*/
 /**
@@ -40,9 +41,25 @@ typedef enum
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void SECURE_RegisterCallback(SECURE_CallbackIDTypeDef CallbackId, void *func);
-void Set_Led(void);
-void Reset_Led(void);
+void SECURE_Set_Led(void);
+void SECURE_Reset_Led(void);
 
+
+/* Public macros -------------------------------------------------------------*/
+
+/* Public typedef ------------------------------------------------------------*/
+
+/* NSC wrapper functions */
+aes_status_t SECURE_AES_Crypto_Init(void);
+aes_status_t SECURE_AES_Crypto_Finalize(void);
+
+aes_status_t SECURE_AES_GCM_Encrypt(
+    const uint8_t *plaintext, size_t plaintext_len,
+    uint8_t *ciphertext_and_tag, size_t *output_len);
+
+aes_status_t SECURE_AES_GCM_Decrypt(
+    const uint8_t *ciphertext_and_tag, size_t input_len,
+    uint8_t *plaintext, size_t *plaintext_len);
 #endif /* SECURE_NSC_H */
 /* USER CODE END Non_Secure_CallLib_h */
 

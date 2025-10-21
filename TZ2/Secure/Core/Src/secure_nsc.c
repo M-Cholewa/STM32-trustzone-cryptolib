@@ -67,14 +67,65 @@ CMSE_NS_ENTRY void SECURE_RegisterCallback(SECURE_CallbackIDTypeDef CallbackId, 
 	}
 }
 
-CMSE_NS_ENTRY void Set_Led(void)
+CMSE_NS_ENTRY void SECURE_Set_Led(void)
 {
-	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin( LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET );
 }
 
-CMSE_NS_ENTRY void Reset_Led(void)
+CMSE_NS_ENTRY void SECURE_Reset_Led(void)
 {
-	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin( LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET );
+}
+
+__attribute__((cmse_nonsecure_entry))
+aes_status_t SECURE_AES_Crypto_Init(void)
+{
+    return AES_Crypto_Init();
+}
+
+__attribute__((cmse_nonsecure_entry))
+aes_status_t SECURE_AES_Crypto_Finalize(void)
+{
+    return AES_Crypto_Finalize();
+}
+
+static const uint8_t key[AES_KEY_SIZE_256] = {
+  0x46,0x3b,0x41,0x29,0x11,0x76,0x7d,0x57,
+  0xa0,0xb3,0x39,0x69,0xe6,0x74,0xff,0xe7,
+  0x84,0x5d,0x31,0x3b,0x88,0xc6,0xfe,0x31,
+  0x2f,0x3d,0x72,0x4b,0xe6,0x8e,0x1f,0xca
+};
+
+static const uint8_t iv[AES_IV_SIZE] = {
+  0x61,0x1c,0xe6,0xf9,0xa6,0x88,0x07,0x50,0xde,0x7d,0xa6,0xcb
+};
+
+static const uint8_t aad[] = { 0x01, 0x02, 0x03, 0x04 };
+
+__attribute__((cmse_nonsecure_entry))
+aes_status_t SECURE_AES_GCM_Encrypt(
+    const uint8_t *plaintext, size_t plaintext_len,
+    uint8_t *ciphertext_and_tag, size_t *output_len)
+{
+    return AES_GCM_Encrypt(
+        plaintext, plaintext_len,
+        key, sizeof(key),
+        iv, sizeof(iv),
+        aad, sizeof(aad),
+        ciphertext_and_tag, output_len);
+}
+
+__attribute__((cmse_nonsecure_entry))
+aes_status_t SECURE_AES_GCM_Decrypt(
+    const uint8_t *ciphertext_and_tag, size_t input_len,
+    uint8_t *plaintext, size_t *plaintext_len)
+{
+    return AES_GCM_Decrypt(
+        ciphertext_and_tag, input_len,
+        key, sizeof(key),
+        iv, sizeof(iv),
+        aad, sizeof(aad),
+        plaintext, plaintext_len);
 }
 /**
  * @}
