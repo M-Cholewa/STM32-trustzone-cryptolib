@@ -28,3 +28,8 @@ Code enables ICACHE (instruction cache) DCACHE (data cache) SWD and some GPIOs f
 RAM distribution was changed a little - by default it is 320KB RAM for Secure and NonSecure. I changed it to 48KB for Secure and 592 KB for NonSecure to fit 192KB of AES cipher.
 
 ![MMT](/IMGs/MemoryManagementTool.png)
+
+
+The difference beteween TrustZone and Non-TrustZone Cache/No-Cache AES encryption time differs with message length - at around 192KB message it was 4ms longer than nonTrustZone project. Surprise surprise TrustZone encryption is slower.
+
+![MMT](/IMGs/DecryptionDifference.png)
